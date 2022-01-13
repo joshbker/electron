@@ -18,6 +18,7 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>3.12.10</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
