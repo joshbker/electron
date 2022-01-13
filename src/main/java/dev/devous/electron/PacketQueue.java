@@ -6,13 +6,13 @@ import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.List;
 import java.util.Queue;
 
 public final class PacketQueue {
     private final MongoCollection<Document> collection;
-    private final Queue<Packet> packetQueue = new LinkedList<>();
+    private final Queue<Packet> packetQueue = new ConcurrentLinkedQueue<>();
 
     PacketQueue(final @NotNull MongoCollection<Document> collection) {
         this.collection = collection;
@@ -23,14 +23,14 @@ public final class PacketQueue {
     }
 
     public boolean flush() {
-        Packet packet = packetQueue.peek();
+        Packet packet = packetQueue.poll();
 
         if (packet == null) {
-            return false;
+            return;
         }
 
-        return collection.replaceOne(Filters.eq("uid", packet.uid().toString()), packet.encode(),
-                new ReplaceOptions().upsert(true)).wasAcknowledged();
+        collection.replaceOne(Filters.eq("uid", packet.uid().toString()), packet.encode(),
+                new ReplaceOptions().upsert(true));
     }
 
     public @NotNull MongoCollection<Document> collection() {
