@@ -22,7 +22,7 @@ public final class PacketQueue {
         return this.packetQueue.addAll(List.of(packets));
     }
 
-    public boolean flush() {
+    public void flush() {
         Packet packet = packetQueue.poll();
 
         if (packet == null) {
