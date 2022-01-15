@@ -1,5 +1,6 @@
 package dev.devous.electron;
 
+import dev.devous.electron.handler.PacketHandler;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,12 +20,13 @@ public class PacketListener {
     }
 
     public void subscribe() {
-       scheduledExecutorService.scheduleAtFixedRate(() -> {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             for (Document document : packetQueue.collection().find()) {
-                packetHandler.handle(Packet.decode(document));
+                Packet packet = Packet.decode(document);
+                packetHandler.handle(packet);
                 packetQueue.collection().deleteOne(document);
             }
             packetQueue.flush();
-        }, 0L, 50L, TimeUnit.MILLISECONDS);
+        }, 50L, 50L, TimeUnit.MILLISECONDS);
     }
 }

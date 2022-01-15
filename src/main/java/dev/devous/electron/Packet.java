@@ -37,7 +37,7 @@ public class Packet {
     }
 
     public static @NotNull Packet decode(final @NotNull Document document) {
-        return new Packet(UUID.fromString(document.getString("unique_id")),
+        return new Packet(UUID.fromString(document.getString("uid")),
                 document.getString("header"), document.getString("content"));
     }
 
