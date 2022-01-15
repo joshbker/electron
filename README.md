@@ -1,2 +1,2 @@
 # `electron`
-Library to utilise MongoDB for cross-server messaging.
+Java library to utilise MongoDB for cross-server messaging.
